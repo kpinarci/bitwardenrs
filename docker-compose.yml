@@ -1,0 +1,35 @@
+---
+# This Bitwarden configuration work with Nginx Proxymanager you should use this Bitwarden container with Reversproxy.
+version: '3'
+
+services:
+  bitwarden_rs:
+    image: bitwardenrs/server:latest
+    container_name: bitwarden
+    restart: unless-stopped
+    volumes:
+      - ./bw-data:/data
+
+#    ports: 
+#      - '8100:80' When you use Proxymanager, don't need the ports
+    environment:
+      WEBSOCKET_ENABLED: 'true' # Required to use websockets
+      LOG_FILE: ./bitwarden.log
+      EXTENDED_LOGGING: 'true'
+      LOG_LEVEL: 'warn'
+      ADMIN_TOKEN: '<your safe token>'
+      From_Name: '<name of your Bitwarden>'
+      INVITATIONS_ALLOWED: 'true'
+      DOMAIN: '<Domain name from bitwarden server>'
+      SMTP_HOST: '<smtp server of your email provider>'
+      SMTP_FROM: '<your email address from to send email>'
+      SMTP_PORT: '587'
+      SMTP_SSL: 'true'
+      SMTP_USERNAME: '<your email address>'
+      SMTP_PASSWORD: '<passwort from your email address>'
+
+
+networks:
+  default:
+      external:
+        name: nginxproxymanager_default # name of ningx proxy manager
